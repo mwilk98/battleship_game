@@ -148,11 +148,14 @@ class Program
     {
         Random random = new Random();
         Game game = new();
-        Ship c1 = new("Carrier", "c", 5);
-        Ship b1 = new("Battleship", "b", 4);
-        Ship d1 = new("Destroyer", "d", 3);
-        Ship s1 = new("Submarine", "s", 3);
-        Ship p1 = new("Patrol Boat", "p", 2);
+        List<Ship> playerOneShips = new List<Ship> {
+            new("Carrier", "c", 5),
+            new("Battleship", "b", 4),
+            new("Destroyer", "d", 3),
+            new("Submarine", "s", 3),
+            new("Patrol Boat", "p", 2),
+        };
+
         Ship c2 = new("Carrier", "c", 5);
         Ship b2 = new("Battleship", "b", 4);
         Ship d2 = new("Destroyer", "d", 3);
@@ -171,31 +174,16 @@ class Program
             } while (listNumbers.Contains(number));
             listNumbers.Add(number);
         }
-        do
+        int index = 0;
+        foreach(var ship in playerOneShips)
         {
-            number = random.Next(2);
-        } while (!board.tryPlaceShip(c1, 1, listNumbers[0], number));
-        board.placeShip(c1, 1, listNumbers[0], number);
-        do
-        {
-            number = random.Next(2);
-        } while (!board.tryPlaceShip(b1, 1, listNumbers[1], number));
-        board.placeShip(b1, 1, listNumbers[1], number);
-        do
-        {
-            number = random.Next(2);
-        } while (!board.tryPlaceShip(d1, 1, listNumbers[2], number));
-        board.placeShip(d1, 1, listNumbers[2], number);
-        do
-        {
-            number = random.Next(2);
-        } while (!board.tryPlaceShip(s1, 1, listNumbers[3], number));
-        board.placeShip(s1, 1, listNumbers[3], number);
-        do
-        {
-            number = random.Next(2);
-        } while (!board.tryPlaceShip(p1, 1, listNumbers[4], number));
-        board.placeShip(p1, 1, listNumbers[4], number);
+            do
+            {
+                number = random.Next(2);
+            } while (!board.tryPlaceShip(ship, 1, listNumbers[index], number));
+            board.placeShip(ship, 1, listNumbers[index], number);
+            index++;
+        }
 
         listNumbers.Clear();
         for (int i = 0; i < 6; i++)
@@ -253,40 +241,24 @@ class Program
                 rows = random.Next(10);
             } while (board.gameBoard[col, rows] == "m" || board.gameBoard[col, rows] == "t");
 
-            if (board.gameBoard[col, rows] == "c")
+            foreach (var ship in playerOneShips)
             {
-                c1.hit();
-                board.gameBoard[col, rows] = "t";
-            }
-            if (board.gameBoard[col, rows] == "b")
-            {
-                b1.hit();
-                board.gameBoard[col, rows] = "t";
-            }
-            if (board.gameBoard[col, rows] == "d")
-            {
-                d1.hit();
-                board.gameBoard[col, rows] = "t";
-            }
-            if (board.gameBoard[col, rows] == "s")
-            {
-                s1.hit();
-                board.gameBoard[col, rows] = "t";
-            }
-            if (board.gameBoard[col, rows] == "p")
-            {
-                p1.hit();
-                board.gameBoard[col, rows] = "t";
+                if (board.gameBoard[col, rows] == ship.symbol)
+                {
+                    ship.hit();
+                    board.gameBoard[col, rows] = "t";
+                }
             }
             if (board.gameBoard[col, rows] == "t")
             {
-                p1.hit();
                 board.gameBoard[col, rows] = "t";
             }
             else
             {
                 board.gameBoard[col, rows] = "m";
             }
+
+
             System.Threading.Thread.Sleep(100);
             time++;
 
@@ -324,7 +296,6 @@ class Program
             }
             if (board2.gameBoard[col2, rows2] == "t")
             {
-                p2.hit();
                 board2.gameBoard[col2, rows2] = "t";
             }
             else
@@ -333,7 +304,7 @@ class Program
             }
             System.Threading.Thread.Sleep(100);
             time++;
-            if (!game.checkShips(c1, b1, d1, s1, p1))
+            if (!game.checkShips(playerOneShips[0], playerOneShips[1], playerOneShips[2], playerOneShips[3], playerOneShips[4]))
             {
                 Console.WriteLine("Player 2 Won!");
             }
@@ -341,7 +312,7 @@ class Program
             {
                 Console.WriteLine("Player 1 Won!");
             }
-        } while (game.checkShips(c1, b1, d1, s1, p1) && game.checkShips(c2, b2, d2, s2, p2));
+        } while (game.checkShips(playerOneShips[0], playerOneShips[1], playerOneShips[2], playerOneShips[3], playerOneShips[4]) && game.checkShips(c2, b2, d2, s2, p2));
     }
 }
         
