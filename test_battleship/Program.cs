@@ -3,26 +3,31 @@ using System.Collections.Generic;
 
 public class Board
 {
-    public string[,] gameBoard = new string[10, 10];
+    public string[][] gameBoard = new string[10][];
 
     public void createBoard()
     {
-        for (int i = 0; i < gameBoard.GetLength(0); i++)
+        for (int i = 0; i < gameBoard.Length; i++)
         {
-            for (int j = 0; j < gameBoard.GetLength(1); j++)
+            gameBoard[i] = new string[10];
+        }
+
+        for (int i = 0; i < gameBoard.Length; i++)
+        {
+            for (int j = 0; j < gameBoard[i].Length; j++)
             {
-                gameBoard[i,j] = "e";
+                gameBoard[i][j] = "e";
             }
         }
     }
 
     public void printBoard()
     {
-        for (int i = 0; i < gameBoard.GetLength(0); i++)
+        for (int i = 0; i < gameBoard.Length; i++)
         {
-            for (int j = 0; j < gameBoard.GetLength(1); j++)
+            for (int j = 0; j < gameBoard[i].Length; j++)
             {
-                Console.Write("{0} ", gameBoard[i, j]);
+                Console.Write("{0} ", gameBoard[i][j]);
             }
             Console.WriteLine();
         }
@@ -31,15 +36,15 @@ public class Board
     public bool tryPlaceShip(Ship ship, int start, int place, int direction)
     {
         bool test = true;
-        for (int i = 0; i < gameBoard.GetLength(0); i++)
+        for (int i = 0; i < gameBoard.Length; i++)
         {
-            for (int j = 0; j < gameBoard.GetLength(1); j++)
+            for (int j = 0; j < gameBoard[i].Length; j++)
             {
                 if (direction == 0)
                 {
                     if (i >= start && i < start + ship.lives && j == place)
                     {
-                        if (gameBoard[i, j] != "e")
+                        if (gameBoard[i][j] != "e")
                         {
                             test = false;
                         }
@@ -49,7 +54,7 @@ public class Board
                 {
                     if (j >= start && j < start + ship.lives && i == place)
                     {
-                        if (gameBoard[i, j] != "e")
+                        if (gameBoard[i][j] != "e")
                         {
                             test = false;
                         }
@@ -62,17 +67,17 @@ public class Board
     }
     public void placeShip(Ship ship, int start, int place, int direction)
     {
-        for (int i = 0; i < gameBoard.GetLength(0); i++)
+        for (int i = 0; i < gameBoard.Length; i++)
         {
-            for (int j = 0; j < gameBoard.GetLength(1); j++)
+            for (int j = 0; j < gameBoard[i].Length; j++)
             {
                 if (direction == 0)
                 {
                     if (i >= start && i < start + ship.lives && j == place)
                     {
-                        if (gameBoard[i, j] == "e")
+                        if (gameBoard[i][j] == "e")
                         {
-                            gameBoard[i, j] = ship.symbol;
+                            gameBoard[i][j] = ship.symbol;
                         }
                     }
                 }
@@ -80,9 +85,9 @@ public class Board
                 {
                     if (j >= start && j < start + ship.lives && i == place)
                     {
-                        if (gameBoard[i, j] == "e")
+                        if (gameBoard[i][j] == "e")
                         {
-                            gameBoard[i, j] = ship.symbol;
+                            gameBoard[i][j] = ship.symbol;
                         }
                     }
                 }
@@ -204,23 +209,23 @@ public class Game
         {
             col = random.Next(10);
             rows = random.Next(10);
-        } while (board.gameBoard[col, rows] == "m" || board.gameBoard[col, rows] == "t");
+        } while (board.gameBoard[col][ rows] == "m" || board.gameBoard[col][ rows] == "t");
 
         foreach (var ship in playerShips)
         {
-            if (board.gameBoard[col, rows] == ship.symbol)
+            if (board.gameBoard[col][ rows] == ship.symbol)
             {
                 ship.hit();
-                board.gameBoard[col, rows] = "t";
+                board.gameBoard[col][ rows] = "t";
             }
         }
-        if (board.gameBoard[col, rows] == "t")
+        if (board.gameBoard[col][ rows] == "t")
         {
-            board.gameBoard[col, rows] = "t";
+            board.gameBoard[col][ rows] = "t";
         }
         else
         {
-            board.gameBoard[col, rows] = "m";
+            board.gameBoard[col][ rows] = "m";
             Console.WriteLine("Miss!");
         }
     }
